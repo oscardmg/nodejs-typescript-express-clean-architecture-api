@@ -1,10 +1,14 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
+interface AuthenticatedRequest extends Request {
+  user?: JwtPayload | string;
+}
+
 export function authenticateToken(
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const token = req.header('Authorization')?.split(' ')[1];
   if (!token) return res.sendStatus(401);
